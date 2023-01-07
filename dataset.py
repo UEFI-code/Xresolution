@@ -33,11 +33,15 @@ class ImgDataset():
     
     def makeBatch(self, batch_size, resolution=(256, 256)):
         batch = []
-        for _ in range(batch_size):
-            batch.append(self.__getitem__(self.enumIndex % self.length, resolution))
-            self.enumIndex += 1
-        self.enumIndex %= self.length # Ensure that the index is always in range
+        for i in range(batch_size):
+            batch.append(self.__getitem__((self.enumIndex + i) % self.length, resolution))
+            #self.enumIndex += 1
+        #self.enumIndex %= self.length # Ensure that the index is always in range
         return torch.tensor(batch)
+    
+    def step(self, step_size):
+        self.enumIndex += step_size
+        self.enumIndex %= self.length
 
 class VideoDataset():
     def __init__(self, root_dir, bigMemory=False):
@@ -97,7 +101,16 @@ class VideoDataset():
             totalFrames = self.length
         else:
             totalFrames = sum(self.length)
-        for _ in range(batch_size):
-            batch.append(self.__getitem__(self.enumIndex % totalFrames, resolution))
-            self.enumIndex += 1
-        self.enumIndex %= totalFrames # Ensure that the index is always in range
+        for i in range(batch_size):
+            batch.append(self.__getitem__((self.enumIndex + i) % totalFrames, resolution))
+            #self.enumIndex += 1
+        #self.enumIndex %= totalFrames # Ensure that the index is always in range
+        return torch.tensor(batch)
+    
+    def step(self, step_size):
+        if self.bigMemory:
+            totalFrames = self.length
+        else:
+            totalFrames = sum(self.length)
+        self.enumIndex += step_size
+        self.enumIndex %= totalFrames

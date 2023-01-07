@@ -18,4 +18,4 @@ class myModel(nn.Module):
         x = self.up3(x)
         x = self.down(x)
         return x
-        
+    
