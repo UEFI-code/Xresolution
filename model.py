@@ -1,0 +1,21 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import bad_graph_transformer
+
+class myModel(nn.Module):
+    def __init__(self):
+        super(myModel, self).__init__()
+        self.relu = nn.ReLU()
+        self.up1 = bad_graph_transformer.BadGraphTransformerUp(3, 64, 3, stride=2, padding=0, normalization=nn.BatchNorm2d(64), activation=self.relu)
+        self.up2 = bad_graph_transformer.BadGraphTransformerUp(64, 128, 3, stride=2, padding=0, normalization=nn.BatchNorm2d(128), activation=self.relu)
+        self.up3 = bad_graph_transformer.BadGraphTransformerUp(128, 128, 3, stride=2, padding=0, normalization=nn.BatchNorm2d(128), activation=self.relu)
+        self.down = bad_graph_transformer.BadGraphTransformerDown(128, 3, 3, stride=2, padding=0, normalization=nn.BatchNorm2d(3), activation=self.relu)
+    
+    def forward(self, x):
+        x = self.up1(x)
+        x = self.up2(x)
+        x = self.up3(x)
+        x = self.down(x)
+        return x
+        
