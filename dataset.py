@@ -38,7 +38,7 @@ class ImgDataset():
             batch.append(self.__getitem__((self.enumIndex + i) % self.length, resolution))
             #self.enumIndex += 1
         #self.enumIndex %= self.length # Ensure that the index is always in range
-        return torch.tensor(batch)
+        return torch.tensor(batch).float()
     
     def step(self, step_size):
         self.enumIndex += step_size
@@ -107,7 +107,7 @@ class VideoDataset():
             batch.append(self.__getitem__((self.enumIndex + i) % totalFrames, resolution))
             #self.enumIndex += 1
         #self.enumIndex %= totalFrames # Ensure that the index is always in range
-        return torch.tensor(batch)
+        return torch.tensor(batch).float()
     
     def step(self, step_size):
         if self.bigMemory:
