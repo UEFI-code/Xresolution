@@ -31,7 +31,7 @@ def train(batchsize = 16, epoch = 10, device = 'cpu', show = False):
             if show and j % 10 == 0:
                 showData = y[0].detach().cpu().numpy().transpose((1, 2, 0))
                 cv2.imshow('image', showData)
-                cv2.waitKey(0)
+                cv2.waitKey(1)
             print('Batch: ' + str(j) + ' Loss: ' + str(loss.item()))
         
         print("Epoch: " + str(i) + " Loss: " + str(loss.item()))
