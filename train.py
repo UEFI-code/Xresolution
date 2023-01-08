@@ -7,7 +7,7 @@ import torch.optim as optim
 import tqdm
 
 # Create the model
-myModel = model.myModel().to(device)
+myModel = model.myModel()
 # Create the optimizer
 optimizer = optim.Adam(myModel.parameters(), lr=0.001)
 # Create the loss function
@@ -17,6 +17,7 @@ myDataset = dataset.ImgDataset('Download/images')
 # Train the model
 
 def train(batchsize = 16, epoch = 10, device = 'cpu', show = False):
+    myModel.to(device)
     for i in range(epoch):
         for j in tqdm.tqdm(range(len(myDataset) // batchsize)):
             batchS = myDataset.makeBatch(batchsize, resolution=(256, 256)).to(device) / 255
