@@ -18,6 +18,7 @@ myDataset = dataset.ImgDataset('Download/images')
 
 def train(batchsize = 16, epoch = 10, device = 'cpu', show = False):
     myModel.to(device)
+    myModel.train()
     for i in range(epoch):
         for j in tqdm.tqdm(range(len(myDataset) // batchsize)):
             batchS = myDataset.makeBatch(batchsize, resolution=(256, 256)).to(device) / 255
