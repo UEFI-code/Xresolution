@@ -21,7 +21,7 @@ class BadGraphTransformerDown(nn.Module):
             b = self.activation(b)
             c = self.activation(c)
         x = a * b + c
-        if dropout is not None:
+        if self.dropout is not None:
             x = self.dropout(x)
         if self.normalization is not None:
             x = self.normalization(x)
