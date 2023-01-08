@@ -35,5 +35,6 @@ def train(batchsize = 16, epoch = 10, device = 'cpu', show = False):
             print('Batch: ' + str(j) + ' Loss: ' + str(loss.item()))
         
         print("Epoch: " + str(i) + " Loss: " + str(loss.item()))
+        torch.save(myModel.state_dict(), 'model.pth')
 
 train(batchsize = 16, epoch = 10, device = 'cuda', show = True)
