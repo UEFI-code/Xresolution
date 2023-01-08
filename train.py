@@ -16,9 +16,12 @@ loss_fn = nn.MSELoss()
 myDataset = dataset.ImgDataset('Download/images')
 # Train the model
 
-def train(batchsize = 16, epoch = 10, device = 'cpu', show = False):
+def train(batchsize = 16, epoch = 10, device = 'cpu', show = False, restore = False):
     myModel.to(device)
     myModel.train()
+    if restore:
+        print("Restoring model...")
+        myModel.load_state_dict(torch.load('model.pth'))
     for i in range(epoch):
         for j in tqdm.tqdm(range(len(myDataset) // batchsize)):
             batchS = myDataset.makeBatch(batchsize, resolution=(256, 256)).to(device) / 255
