@@ -29,6 +29,7 @@ class ImgDataset():
             img_path = os.path.join(self.root_dir, self.img_paths[idx])
             image = cv2.imread(img_path)
         image = cv2.resize(image, resolution)
+        image = image.transpose((2, 0, 1))
         return image
     
     def makeBatch(self, batch_size, resolution=(256, 256)):
@@ -93,6 +94,7 @@ class VideoDataset():
             video.set(cv2.CAP_PROP_POS_FRAMES, idx - s)
             ret, image = video.read()
         image = cv2.resize(image, resolution)
+        image = image.transpose((2, 0, 1))
         return image
     
     def makeBatch(self, batch_size, resolution=(256, 256)):
