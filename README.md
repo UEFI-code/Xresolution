@@ -2,6 +2,6 @@
 
 ## What is Bad Transformer
 
-[Bad Transformer](https://github.com/UEFI-code/BadTransformer) is a type of Transformer proposed by ```SuperHacker UEFI```
+[Bad Transformer](https://github.com/UEFI-code/BadTransformer) is a type of Transformer proposed by ```Shizhuo Zhang (SuperHacker UEFI)```
 
 It is easy to understand what its internal actually do, and may have same effects as the original Transformer.
