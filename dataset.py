@@ -89,7 +89,7 @@ class VideoDataset():
                 internal_file_index += 1
                 s += self.length[internal_file_index]
             s -= self.length[internal_file_index]
-            print('Selected video: {}'.format(self.video_paths[internal_file_index]))
+            #print('Selected video: {}'.format(self.video_paths[internal_file_index]))
             video = self.videoHandles[internal_file_index]
             video.set(cv2.CAP_PROP_POS_FRAMES, idx - s)
             ret, image = video.read()
