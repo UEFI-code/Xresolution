@@ -30,5 +30,5 @@ def testImg(path):
     cv2.imshow('image', out)
     cv2.waitKey(0)
 
-testImg('test.png')
+#testImg('test.png')
 testCamera(0)
