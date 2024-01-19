@@ -7,6 +7,17 @@ import torch.optim as optim
 import tqdm
 import cv2
 import os
+
+# check if macOS
+import platform
+if platform.system() == 'Darwin':
+    # using torch.device("mps")
+    device = torch.device("mps")
+    print("Using MPS on macOS")
+else:
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    print(f"Using {device} for training")
+
 # Create the model
 myModel = model.myModel()
 # Create the optimizer
@@ -40,4 +51,4 @@ def train(batchsize = 16, epoch = 10, device = 'cpu', show = False, restore = Tr
             print("Epoch: " + str(i) + ' Batch: ' + str(j) + ' Loss: ' + str(loss.item()))
         torch.save(myModel.state_dict(), 'model.pth')
 
-train(batchsize = 20, epoch = 10, device = 'cuda:1', show = True)
+train(batchsize = 20, epoch = 10, device = device, show = True)

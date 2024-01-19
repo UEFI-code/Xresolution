@@ -60,7 +60,7 @@ class VideoDataset():
                     ret, frame = video.read()
                     if not ret:
                         break
-                    self.videoMemory.append(frames)
+                    self.videoMemory.append(frame)
                 video.release()
             self.length = len(self.videoMemory)
         else:
