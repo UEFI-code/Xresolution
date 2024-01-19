@@ -19,9 +19,6 @@ class ImgDataset():
                 image = cv2.imread(img_path)
                 self.imgMemory.append(image)
 
-    def __len__(self):
-        return self.length
-
     def __getitem__(self, idx, resolution=(256, 256)):
         if self.bigMemory:
             image = self.imgMemory[idx]
@@ -63,6 +60,7 @@ class VideoDataset():
                     self.videoMemory.append(frame)
                 video.release()
             self.length = len(self.videoMemory)
+            self.totalFrames = self.length
         else:
             self.length = []
             self.videoHandles = []
@@ -72,12 +70,7 @@ class VideoDataset():
                 self.length.append(int(video.get(cv2.CAP_PROP_FRAME_COUNT)))
                 self.videoHandles.append(video)
                 print("Video {} has {} frames".format(i, self.length[-1]))
-    
-    def __len__(self):
-        if self.bigMemory:
-            return self.length
-        else:
-            return sum(self.length)
+            self.totalFrames = sum(self.length)
     
     def __getitem__(self, idx, resolution=(256, 256)):
         if self.bigMemory:
@@ -99,20 +92,12 @@ class VideoDataset():
     
     def makeBatch(self, batch_size, resolution=(256, 256)):
         batch = []
-        if self.bigMemory:
-            totalFrames = self.length
-        else:
-            totalFrames = sum(self.length)
         for i in range(batch_size):
-            batch.append(self.__getitem__((self.enumIndex + i) % totalFrames, resolution))
+            batch.append(self.__getitem__((self.enumIndex + i) % self.totalFrames, resolution))
             #self.enumIndex += 1
         #self.enumIndex %= totalFrames # Ensure that the index is always in range
         return torch.tensor(batch).float()
     
     def step(self, step_size):
-        if self.bigMemory:
-            totalFrames = self.length
-        else:
-            totalFrames = sum(self.length)
         self.enumIndex += step_size
-        self.enumIndex %= totalFrames
+        self.enumIndex %= self.totalFrames
