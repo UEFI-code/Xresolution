@@ -65,6 +65,8 @@ class VideoDataset():
             self.length = []
             self.videoHandles = []
             for i in self.video_paths:
+                if not i.endswith('.mp4'):
+                    continue
                 video_path = os.path.join(root_dir, i)
                 video = cv2.VideoCapture(video_path)
                 self.length.append(int(video.get(cv2.CAP_PROP_FRAME_COUNT)))
