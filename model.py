@@ -4,26 +4,37 @@ import torch.nn.functional as F
 import bad_graph_transformer
 
 class myModel(nn.Module):
-    def __init__(self, embeddingDim = 8, embeddingDeepth = 2, debug=False):
+    def __init__(self, embeddingDim = 8, embeddingDeepth = 2, deepth = 3, debug=False):
         super(myModel, self).__init__()
-        self.relu = nn.ReLU()
-        self.up1 = bad_graph_transformer.BadGraphTransformerUp(3, embeddingDim, 3, stride=2, padding=0, deepth=embeddingDeepth, debug=debug)
-        self.down1 = bad_graph_transformer.BadGraphTransformerDown(embeddingDim, embeddingDim, 3, stride=2, padding=0, deepth=embeddingDeepth, debug=debug)
-        self.up2 = bad_graph_transformer.BadGraphTransformerUp(embeddingDim, embeddingDim, 3, stride=2, padding=0, deepth=embeddingDeepth, debug=debug)
-        self.down2 = bad_graph_transformer.BadGraphTransformerDown(embeddingDim, 3, 3, stride=2, padding=0, deepth=1, debug=debug)
+        self.embedingGroup = nn.Sequential()
+        for i in range(deepth):
+            if i == 0:
+                self.embedingGroup.append(bad_graph_transformer.BadGraphTransformerUp(3, embeddingDim, 3, stride=2, padding=0, deepth=embeddingDeepth, debug=debug))
+            else:
+                self.embedingGroup.append(bad_graph_transformer.BadGraphTransformerUp(embeddingDim, embeddingDim, 3, stride=2, padding=0, deepth=embeddingDeepth, debug=debug))
+            self.embedingGroup.append(bad_graph_transformer.BadGraphTransformerDown(embeddingDim, embeddingDim, 3, stride=2, padding=0, deepth=embeddingDeepth, debug=debug))
+        
+        self.winduper = nn.Sequential(
+            bad_graph_transformer.BadGraphTransformerUp(embeddingDim, embeddingDim, 3, stride=2, padding=0, deepth=embeddingDeepth, debug=debug),
+            bad_graph_transformer.BadGraphTransformerDown(embeddingDim, 3, 3, stride=2, padding=0, deepth=1, debug=debug)
+        )
+
         self.debug = debug
     
     def forward(self, x):
-        x = self.up1(x)
         if self.debug:
-            print(f'x.shape after up1: {x.shape}')
-        x = self.down1(x)
-        if self.debug:
-            print(f'x.shape after down1: {x.shape}')
-        x = self.up2(x)
-        if self.debug:
-            print(f'x.shape after up2: {x.shape}')
-        x = self.down2(x)
+            i = 0
+            for layer in self.embedingGroup:
+                x = layer(x)
+                print(f'Embedding layer {i} output shape: {x.shape}')
+                i += 1
+            i = 0
+            for layer in self.winduper:
+                x = layer(x)
+                print(f'Winduper layer {i} output shape: {x.shape}')
+        else:
+            x = self.embedingGroup(x)
+            x = self.winduper(x)
         return x
 
 if __name__ == '__main__':
