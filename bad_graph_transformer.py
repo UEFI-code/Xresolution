@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 class BadGraphTransformerDown(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size = 3, stride=1, padding=0, normalization = None, activation = nn.ReLU(), deepth = 2, debug=False):
