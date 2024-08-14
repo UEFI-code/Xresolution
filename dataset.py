@@ -51,6 +51,8 @@ class VideoDataset():
             print("Wow big RAM! Loading videos into memory...")
             self.videoMemory = []
             for i in self.video_paths:
+                if not i.endswith('.mp4'):
+                    continue
                 video_path = os.path.join(root_dir, i)
                 video = cv2.VideoCapture(video_path)
                 while True:
