@@ -16,7 +16,7 @@ class myModel(nn.Module):
         
         self.winduper = nn.Sequential(
             bad_graph_transformer.BadGraphTransformerUp(embeddingDim, embeddingDim, 3, stride=2, padding=0, deepth=embeddingDeepth, debug=debug),
-            bad_graph_transformer.BadGraphTransformerDown(embeddingDim, 3, 3, stride=2, padding=0, deepth=1, debug=debug)
+            nn.Conv2d(embeddingDim, 3, 5, stride=3, padding=0) # A normal convolutional decoder is enough.
         )
 
         self.debug = debug
