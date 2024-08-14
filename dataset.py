@@ -64,28 +64,28 @@ class VideoDataset():
             self.length = len(self.videoMemory)
             self.totalFrames = self.length
         else:
-            self.length = []
+            self.lengths = []
             self.videoHandles = []
             for i in self.video_paths:
                 if not i.endswith('.mp4'):
                     continue
                 video_path = os.path.join(root_dir, i)
                 video = cv2.VideoCapture(video_path)
-                self.length.append(int(video.get(cv2.CAP_PROP_FRAME_COUNT)))
+                self.lengths.append(int(video.get(cv2.CAP_PROP_FRAME_COUNT)))
                 self.videoHandles.append(video)
-                print("Video {} has {} frames".format(i, self.length[-1]))
-            self.totalFrames = sum(self.length)
+                print("Video {} has {} frames".format(i, self.lengths[-1]))
+            self.totalFrames = sum(self.lengths)
     
     def __getitem__(self, idx, resolution=(256, 256)):
         if self.bigMemory:
             image = self.videoMemory[idx]
         else:
             internal_file_index = 0
-            s = self.length[0]
-            while idx >= s:
+            s = self.lengths[0]
+            while idx >= s: # Search for the video that contains the frame idx
                 internal_file_index += 1
-                s += self.length[internal_file_index]
-            s -= self.length[internal_file_index]
+                s += self.lengths[internal_file_index]
+            s -= self.lengths[internal_file_index]
             #print('Selected video: {}'.format(self.video_paths[internal_file_index]))
             video = self.videoHandles[internal_file_index]
             video.set(cv2.CAP_PROP_POS_FRAMES, idx - s)
