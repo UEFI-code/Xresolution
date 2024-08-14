@@ -35,9 +35,9 @@ def train(batchsize = 16, epoch = 10, device = 'cpu', show = False, restore = Tr
         print("Restoring model...")
         myModel.load_state_dict(torch.load('model.pth'))
     for i in range(epoch):
-        for j in tqdm.tqdm(range(len(myDataset) // batchsize)):
+        for j in tqdm.tqdm(range(myDataset.totalFrames // batchsize)):
             batchS = myDataset.makeBatch(batchsize, resolution=(256, 256)).to(device) / 255
-            batchT = myDataset.makeBatch(batchsize, resolution=(1027, 1027)).to(device) / 255
+            batchT = myDataset.makeBatch(batchsize, resolution=(1369, 1369)).to(device) / 255
             y = myModel(batchS)
             loss = loss_fn(y, batchT)
             optimizer.zero_grad()

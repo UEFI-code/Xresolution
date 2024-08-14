@@ -25,7 +25,7 @@ optimizer = optim.Adam(myModel.parameters(), lr=0.001)
 # Create the loss function
 loss_fn = nn.MSELoss()
 # Create the dataset
-myDataset = dataset.ImgDataset('/hdd2/uefi/GANData/train', True)
+myDataset = dataset.ImgDataset('/Users/uefi/Documents/gan', True)
 # Train the model
 
 def train(batchsize = 16, epoch = 10, device = 'cpu', show = False, restore = True):
@@ -35,9 +35,9 @@ def train(batchsize = 16, epoch = 10, device = 'cpu', show = False, restore = Tr
         print("Restoring model...")
         myModel.load_state_dict(torch.load('model.pth'))
     for i in range(epoch):
-        for j in tqdm.tqdm(range(len(myDataset) // batchsize)):
+        for j in tqdm.tqdm(range(myDataset.length // batchsize)):
             batchS = myDataset.makeBatch(batchsize, resolution=(256, 256)).to(device) / 255
-            batchT = myDataset.makeBatch(batchsize, resolution=(1027, 1027)).to(device) / 255
+            batchT = myDataset.makeBatch(batchsize, resolution=(1369, 1369)).to(device) / 255
             y = myModel(batchS)
             loss = loss_fn(y, batchT)
             optimizer.zero_grad()
