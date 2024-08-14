@@ -61,8 +61,7 @@ class VideoDataset():
                         break
                     self.videoMemory.append(frame)
                 video.release()
-            self.length = len(self.videoMemory)
-            self.totalFrames = self.length
+            self.totalFrames = len(self.videoMemory)
         else:
             self.lengths = []
             self.videoHandles = []
